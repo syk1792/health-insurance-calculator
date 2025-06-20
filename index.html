@@ -1,0 +1,22 @@
+<input id="income" type="number" placeholder="월소득" />
+<select id="employeeCount">
+  <option value="1">1명</option>
+  <option value="5">5명</option>
+</select>
+<button onclick="calculate()">계산하기</button>
+
+<p id="result"></p>
+
+<script>
+function calculate() {
+  const income = parseFloat(document.getElementById('income').value);
+  const healthRate = 0.0709;
+  const careRate = 0.009182;
+
+  const health = income * healthRate;
+  const care = health * careRate;
+
+  document.getElementById('result').innerText =
+    `건강보험료: ${health.toFixed(0)}원 / 장기요양: ${care.toFixed(0)}원`;
+}
+</script>
