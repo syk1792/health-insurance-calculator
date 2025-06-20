@@ -1,10 +1,10 @@
-<!-- 이건 새로 정리된 '총급여 ÷ 근로자수' 자동계산 버전 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>건강보험료 계산기</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
   <style>
     body {
       background: #f4f4f4;
@@ -83,10 +83,8 @@
 
       const perIncome = total / count;
       const healthRate = 0.0709;
-      const careRate = 0.1295;
-
       const health = perIncome * healthRate;
-      const care = health * careRate;
+      const care = health * 0.1295; // 장기요양요율은 건강보험료의 12.95%
       const totalPer = health + care;
       const workerCost = totalPer * count;
       const employerCost = workerCost;
@@ -94,9 +92,4 @@
       document.getElementById('result').innerHTML = `
         👍 <strong>근로자 부담 (합계):</strong> ${Math.round(workerCost).toLocaleString()}원<br>
         💼 <strong>사업주 부담 (합계):</strong> ${Math.round(employerCost).toLocaleString()}원<br>
-        <small>(1인당 건강보험 ${Math.round(health).toLocaleString()}원 + 장기요양 ${Math.round(care).toLocaleString()}원)</small>
-      `;
-    }
-  </script>
-</body>
-</html>
+        <small>(1인당 건강보험 ${Math.rou
