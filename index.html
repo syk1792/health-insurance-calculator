@@ -1,37 +1,102 @@
-<input id="totalIncome" type="number" placeholder="총 급여 (예: 세전 월급)" />
-<label for="employeeCount">근로자 수</label>
-<select id="employeeCount">
-  <option value="1">1명</option>
-  <option value="5">5명</option>
-  <option value="50">50명 이상</option>
-</select>
-<button onclick="calculate()">계산하기</button>
-<p id="result"></p>
+<!-- 이건 새로 정리된 '총급여 ÷ 근로자수' 자동계산 버전 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>건강보험료 계산기</title>
+  <style>
+    body {
+      background: #f4f4f4;
+      font-family: 'Pretendard', sans-serif;
+      padding: 30px;
+    }
+    .calc-box {
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      max-width: 400px;
+      margin: auto;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin: 14px 0 6px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      margin-top: 20px;
+      background: #e84118;
+      color: #fff;
+      padding: 14px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 24px;
+      background: #fefefe;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-box">
+    <h2 style="text-align:center;">건강보험료 계산기</h2>
 
-<script>
-function calculate() {
-  const total = parseFloat(document.getElementById('totalIncome').value);
-  const count = parseFloat(document.getElementById('employeeCount').value);
+    <label for="totalIncome">총 급여 (세전 월급 총액)</label>
+    <input id="totalIncome" type="number" placeholder="예: 4860000" />
 
-  if (!total || total <= 0 || !count || count < 1) {
-    return document.getElementById('result').innerText =
-      '총 급여와 근로자 수를 올바르게 입력하세요.';
-  }
+    <label for="employeeCount">근로자 수</label>
+    <select id="employeeCount">
+      <option value="1">1명</option>
+      <option value="5">5명</option>
+      <option value="50">50명 이상</option>
+      <option value="150">150명</option>
+    </select>
 
-  const perIncome = total / count;
-  const healthRate = 0.0709;
-  const careRate = 0.009182;
+    <button onclick="calculate()">건강보험료 계산하기</button>
+    <div id="result"></div>
+  </div>
 
-  const health = perIncome * healthRate;
-  const care = health * careRate;
-  const totalBurden = health + care;
+  <script>
+    function calculate() {
+      const total = parseFloat(document.getElementById('totalIncome').value);
+      const count = parseFloat(document.getElementById('employeeCount').value);
 
-  const workerCost = totalBurden * count;
-  const employerCost = workerCost; // 사업주 부담도 동일 비율 계산
+      if (!total || total <= 0 || !count || count < 1) {
+        return document.getElementById('result').innerText =
+          '총 급여와 근로자 수를 올바르게 입력하세요.';
+      }
 
-  document.getElementById('result').innerHTML = `
-    👍 <strong>근로자 부담 (합계):</strong> ${Math.round(workerCost).toLocaleString()}원<br>
-    💼 <strong>사업주 부담 (합계):</strong> ${Math.round(employerCost).toLocaleString()}원<br>
-    (1인당 건강보험 ${Math.round(health).toLocaleString()}원, 장기요양 ${Math.round(care).toLocaleString()}원)`
-}
-</script>
+      const perIncome = total / count;
+      const healthRate = 0.0709;
+      const careRate = 0.1295;
+
+      const health = perIncome * healthRate;
+      const care = health * careRate;
+      const totalPer = health + care;
+      const workerCost = totalPer * count;
+      const employerCost = workerCost;
+
+      document.getElementById('result').innerHTML = `
+        👍 <strong>근로자 부담 (합계):</strong> ${Math.round(workerCost).toLocaleString()}원<br>
+        💼 <strong>사업주 부담 (합계):</strong> ${Math.round(employerCost).toLocaleString()}원<br>
+        <small>(1인당 건강보험 ${Math.round(health).toLocaleString()}원 + 장기요양 ${Math.round(care).toLocaleString()}원)</small>
+      `;
+    }
+  </script>
+</body>
+</html>
